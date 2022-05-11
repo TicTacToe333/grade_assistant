@@ -4,23 +4,12 @@
 
 using namespace std;
 
-int * append(int array[], int newNum){
-    int size = (sizeof(array)/sizeof(array[0]));
-    int newArray [size + 1]= {};
-    for(int i = 0; i < size; i++){
-        newArray[i] = array[i];
-    }
-    newArray[size] = newNum;
-
-    return newArray;
-}
-
 class Assignment {
     public:
         int lowRange;
         int highRange;
         int totalAssignments;
-        int * scores;
+        int scores;
         float assignmentWeight;
         Assignment(int num1, int num2, float weight)
         {
@@ -40,7 +29,7 @@ class Assignment {
         void setHighRange(int newHigh){
             highRange = newHigh;
         }
-        int getAssignmentWeight(){
+        float getAssignmentWeight(){
             return assignmentWeight;
         }
         void setAssignmentWeight(int newWeight){
@@ -55,24 +44,28 @@ class Assignment {
         void addAssignment(){
             totalAssignments++;
         }
-        int * getScores(){
+        int getScores(){
             return scores;
         }
-        void * addScores(int newScore){
-            scores = append(scores, newScore);
+        void addScores(int newScore){
+            scores = scores + newScore;
         }
-        
+        float results(){
+            float scoreTotal = scores / (totalAssignments * 10);
+            return float(scoreTotal * assignmentWeight);
+        }
 };
 
 int math(int num1,int num2, int divisor){
-    if(divisor == 1){
-        return num1 + num2;
-    }
-        if(divisor == 2){
-        return num1 - num2;
-    }
-        if(divisor == 3){
-        return num1 * num2;
+    switch(divisor){
+        case 0:
+            return num1 + num2;
+        case 1:
+            return num1 - num2;
+        case 2:
+            return num1 * num2;
+        default:
+            return 0;
     }
     return 0;
 }
@@ -80,36 +73,26 @@ int math(int num1,int num2, int divisor){
 int tester(Assignment work)
 {
     float numCorrect;
-    int divisor = 1;
-    int num1 = rand() % work.getHighRange();
-    int num2 = rand() % work.getHighRange();
+    int divisor = 0;
     for(int i = 0; i < 10; i++){
         int input;
-        cout << (i + 1);
-        cout << num1;
-        cout << " + ";
-        cout << num2 << endl;
+        int num1 = rand() % work.getHighRange();
+        int num2 = rand() % work.getHighRange();
+        cout << (i + 1) << ". " << num1 << " + " << num2 << endl;
         cout << ("Answer: ");
-        scanf ("%c",&input);
+        cin >> input;
         int answer = math(num1, num2, divisor);
-        if(answer = input){
+        if(answer == input){
+            cout << "Correct!" << endl;
             numCorrect++;
+        }else{
+            cout <<"The correct answer was: " << answer << endl;
         }
+        cout << " " << endl;
     }
-    return (numCorrect / 10);
+    return numCorrect;
 }
 
-
-int results(Assignment assignment){
-        int scoreTotal;   
-        for(int i = 0; i < assignment.getTotalAssignments(); i++){
-            scoreTotal = assignment.getScores()[i] + scoreTotal;
-        }
-        
-        scoreTotal = scoreTotal / assignment.getTotalAssignments();
-
-        return (scoreTotal * assignment.getAssignmentWeight());
-}
 
 
 int main()
@@ -118,14 +101,16 @@ int main()
     Assignment hw = Assignment(0,10,0.6);
     string choice = "h";
     while(choice == "h" || choice == "t"){
-        printf ("Take a test or do homework (Enter t or h) ");
-        scanf ("%c",&choice);
-        if(choice == "h"){
-            test.addScores(tester(hw));
-        }else{
-            hw.addScores(tester(test));
+        cout << "Take a test or do homework (Enter t or h) " << endl;
+        cout << "Enter r to see your final grade. ";
+        cin >> choice;
+        if(choice == "t"){
+            test.addScores(tester(test));
+        }else if(choice == "h"){
+            hw.addScores(tester(hw));
         }
     }
-    int finalScore = results(hw) + results(test);
+    float finalScore =  test.results() * 10;
     cout << finalScore;
+    return 0;
 }
