@@ -4,6 +4,17 @@
 
 using namespace std;
 
+int * append(int array[], int newNum){
+    int size = (sizeof(array)/sizeof(array[0]));
+    int newArray [size + 1]= {};
+    for(int i = 0; i < size; i++){
+        newArray[i] = array[i];
+    }
+    newArray[size] = newNum;
+
+    return newArray;
+}
+
 class Assignment {
     public:
         int lowRange;
@@ -47,33 +58,11 @@ class Assignment {
         int * getScores(){
             return scores;
         }
-        int * addScores(int newScore){
+        void * addScores(int newScore){
             scores = append(scores, newScore);
         }
         
 };
-
-
-int tester(Assignment work)
-{
-    float numCorrect;
-    int divisor = 1;
-    int num1 = rand() % work.getHighRange();
-    int num2 = rand() % work.getHighRange();
-    for(int i = 0; i < 10; i++){
-        string input;
-        cout << (i + 1);
-        cout << num1;
-        cout << " + ";
-        cout << num2 << endl;
-        printf ("Answer: ");
-        scanf ("%c",&input);
-        if(math(num1, num2, divisor) = input){
-            numCorrect++;
-        }
-    }
-    return (numCorrect / 10);
-}
 
 int math(int num1,int num2, int divisor){
     if(divisor == 1){
@@ -88,6 +77,29 @@ int math(int num1,int num2, int divisor){
     return 0;
 }
 
+int tester(Assignment work)
+{
+    float numCorrect;
+    int divisor = 1;
+    int num1 = rand() % work.getHighRange();
+    int num2 = rand() % work.getHighRange();
+    for(int i = 0; i < 10; i++){
+        int input;
+        cout << (i + 1);
+        cout << num1;
+        cout << " + ";
+        cout << num2 << endl;
+        cout << ("Answer: ");
+        scanf ("%c",&input);
+        int answer = math(num1, num2, divisor);
+        if(answer = input){
+            numCorrect++;
+        }
+    }
+    return (numCorrect / 10);
+}
+
+
 int results(Assignment assignment){
         int scoreTotal;   
         for(int i = 0; i < assignment.getTotalAssignments(); i++){
@@ -99,16 +111,6 @@ int results(Assignment assignment){
         return (scoreTotal * assignment.getAssignmentWeight());
 }
 
-int * append(int array[], int newNum){
-    int size = (sizeof(array)/sizeof(array[0]));
-    int newArray [size + 1]= {};
-    for(int i = 0; i < size; i++){
-        newArray[i] = array[i];
-    }
-    newArray[size] = newNum;
-
-    return newArray;
-}
 
 int main()
 {
